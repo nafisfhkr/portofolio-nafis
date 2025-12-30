@@ -13,7 +13,6 @@ export default function Hero() {
       </video>
 
       {/* 2. Overlay Gelap & Gradient */}
-      {/* Overlay ini penting agar teks putihmu kontras dengan video yang terang */}
       <div className="absolute inset-0 z-10 bg-black/50 bg-gradient-to-r from-black/80 via-black/20 to-transparent"></div>
 
       {/* 3. Konten Teks */}
@@ -33,7 +32,7 @@ export default function Hero() {
             RESUME
           </button>
           <button className="rounded-full border border-white/50 bg-white/10 px-10 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white hover:text-black">
-            PORTFOLIO
+            CONTACT ME
           </button>
         </div>
       </div>
