@@ -3,7 +3,7 @@
 import { Smartphone } from "lucide-react";
 import { useEffect, useState } from "react";
 
-type SectionId = 'home' | 'about' | 'resume' | 'projects';
+type SectionId = 'home' | 'about' | 'resume' | 'projects'| 'contact';
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<SectionId>('home');
@@ -26,7 +26,7 @@ export default function Navbar() {
   // Deteksi section aktif saat scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections: SectionId[] = ['home', 'about', 'resume', 'projects'];
+      const sections: SectionId[] = ['home', 'about', 'resume', 'projects', 'contact'];
       const scrollPosition = window.scrollY + 100; 
 
       for (const section of sections) {
@@ -57,6 +57,7 @@ export default function Navbar() {
     { id: 'about', label: 'About' },
     { id: 'resume', label: 'Resume' },
     { id: 'projects', label: 'Projects' },
+    { id: 'contact', label: 'Contact' },
   ];
 
   return (

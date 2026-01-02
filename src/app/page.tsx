@@ -3,6 +3,8 @@ import About from "../components/sections/About";
 import Resume from "../components/sections/Resume";
 import Projects from "../components/sections/Projects";
 import SkillsScroll from "../components/sections/SkillsScroll";
+import Contact from "../components/sections/Contact";
+import Footer from "../components/sections/Footer";
 
 export default function Home() {
   return (
@@ -26,6 +28,15 @@ export default function Home() {
       <section id="projects">
         <Projects />
       </section>
+
+      <section id="contact">
+        <Contact />
+      </section>
+
+      <footer>
+        <Footer />
+      </footer>
+
     </main>
   );
 }

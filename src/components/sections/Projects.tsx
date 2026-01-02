@@ -52,19 +52,33 @@ export default function Projects() {
       image: "/Prediksi modal petani.png"
     },
     {
-      id: "laravel-api",
-      title: "Laravel REST API",
-      category: "Backend Development",
-      role: "Backend Developer",
-      desc: "Kumpulan API backend yang aman dengan sistem autentikasi token-based menggunakan Laravel Sanctum.",
-      tech: ["Laravel", "Sanctum", "MySQL", "Postman"],
-      links: [
-        { label: "API Docs", icon: <ExternalLink size={14} />, url: "#" },
-        { label: "GitHub", icon: <Github size={14} />, url: "https://github.com/nafisfhkr/api-kasir" },
-      ],
-      isMobile: false,
-      image: "/project-api.jpg"
-    }
+  id: "pos-api-laravel",
+  title: "POS API (Laravel)",
+  category: "Backend Development",
+  role: "Backend Developer",
+  desc: "POS API berbasis Laravel dengan autentikasi Sanctum, outlet-scoped routes, transaksi aman (DB transaction + row locking), stok konsisten, dan idempotency untuk pembayaran QRIS. Termasuk Postman Collection untuk demo.",
+  tech: ["Laravel", "Sanctum", "MySQL", "Postman", "OpenAPI", "Swagger UI"],
+  links: [
+    {
+      label: "API Docs",
+      icon: <ExternalLink size={14} />,
+      url: "https://nafisfhkr.github.io/pos-api-satutoko/",
+    },
+    {
+      label: "Postman",
+      icon: <ExternalLink size={14} />,
+      url: "https://www.postman.com/naf5rudin/workspace/pos-api-satu-toko/collection/38083662-ccf664e2-8f84-4807-b004-653b6dce9388?action=share&creator=38083662", 
+    },
+    {
+      label: "GitHub",
+      icon: <Github size={14} />,
+      url: "https://github.com/nafisfhkr/pos-api-satutoko",
+    },
+  ],
+  isMobile: false,
+  image: "/api-satutoko.png",
+}
+
   ];
 
   const handleWatchDemo = (videoId: string, title: string) => {
@@ -84,7 +98,7 @@ export default function Projects() {
           {projects.map((project) => (
             <div 
               key={project.id} 
-              // Klik pada Card membuka Modal Detail
+              
               onClick={() => setSelectedProject(project)}
               className="group relative bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] overflow-hidden hover:border-white/20 transition-all duration-500 cursor-pointer shadow-2xl"
             >
@@ -112,12 +126,26 @@ export default function Projects() {
               </div>
 
               {/* Content Card */}
-              <div className="p-8">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mb-2">{project.category}</p>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-gray-300 transition-colors leading-tight">{project.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed mb-8 h-12 line-clamp-2 font-light italic">
-                  {project.desc}
-                </p>
+<div className="p-8">
+  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mb-2">
+    {project.category}
+  </p>
+
+  {project.role && (
+    <p className="text-xs text-gray-500 mb-2 font-medium">
+      {project.role}
+    </p>
+  )}
+
+  <h3 className="text-2xl font-bold mb-4 group-hover:text-gray-300 transition-colors leading-tight">
+    {project.title}
+  </h3>
+
+  <p className="text-sm text-gray-500 leading-relaxed mb-8 h-12 line-clamp-2 font-light italic">
+    {project.desc}
+  </p>
+
+
 
                 {/* Tombol-tombol Tetap Ada di Card */}
                 <div className="flex flex-wrap gap-3">

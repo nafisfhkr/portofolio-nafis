@@ -103,7 +103,7 @@ export default function Resume() {
             </div>
           </div>
 
-          {/* Kolom 3: Skills (Ukuran teks diperbesar) */}
+          {/* Kolom 3: Skills */}
           <div className="space-y-10">
             <div className="flex items-center gap-4 mb-8">
               <div className="p-3 bg-white/5 rounded-xl border border-white/10">
