@@ -84,7 +84,7 @@ export default function Navbar() {
       {/* Info Kontak Kanan */}
       <div className="hidden md:flex items-center gap-2 text-[11px] tracking-widest text-white uppercase font-light">
         <Smartphone size={14} className="text-white" />
-        <span>774-555-3021</span>
+        <span>087-86227-5587</span>
       </div>
     </nav>
   );
