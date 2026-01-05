@@ -35,7 +35,7 @@ export default function Projects() {
         { label: "GitHub", icon: <Github size={14} />, url: "https://github.com/nafisfhkr/web-postkasir" },
       ],
       isMobile: false,
-      image: "/web kasir.png"
+      image: "/web kasir.webp"
     },
     {
       id: "credit-system",
@@ -49,7 +49,7 @@ export default function Projects() {
         { label: "GitHub", icon: <Github size={14} />, url: "https://github.com/nafisfhkr/native-ahp-knn-implementation" },
       ],
       isMobile: false,
-      image: "/Prediksi modal petani.png"
+      image: "/Prediksi modal petani.webp"
     },
     {
   id: "pos-api-laravel",
@@ -76,7 +76,7 @@ export default function Projects() {
     },
   ],
   isMobile: false,
-  image: "/api-satutoko.png",
+  image: "/api-satutoko.webp",
 }
 
   ];
