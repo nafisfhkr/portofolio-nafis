@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -15,8 +15,11 @@ import {
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
 
+// --- ASSETS PATH ---
+// Pastikan file ini ada di folder public/lanyard/
 const cardGLB = '/lanyard/card.glb';
-const lanyardTexture = '/lanyard/lanyard.png';
+const lanyardTexture = '/lanyard/lanyard.webp';
+
 
 import '../../style/Lanyard.css';
 
@@ -56,34 +59,10 @@ export default function Lanyard({
           <Band isMobile={isMobile} />
         </Physics>
         <Environment blur={0.75}>
-          <Lightformer
-            intensity={2}
-            color="white"
-            position={[0, -1, 5]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={3}
-            color="white"
-            position={[-1, -1, 1]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={3}
-            color="white"
-            position={[1, 1, 1]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={10}
-            color="white"
-            position={[-10, 0, 14]}
-            rotation={[0, Math.PI / 2, Math.PI / 3]}
-            scale={[100, 10, 1]}
-          />
+          <Lightformer intensity={2} color="white" position={[0, -1, 5]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+          <Lightformer intensity={3} color="white" position={[-1, -1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+          <Lightformer intensity={3} color="white" position={[1, 1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+          <Lightformer intensity={10} color="white" position={[-10, 0, 14]} rotation={[0, Math.PI / 2, Math.PI / 3]} scale={[100, 10, 1]} />
         </Environment>
       </Canvas>
     </div>
@@ -109,6 +88,9 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
   const rot = new THREE.Vector3();
   const dir = new THREE.Vector3();
 
+  
+  const isFiniteVec = (p: any) => p && Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.z);
+
   const segmentProps: any = {
     type: 'dynamic' as RigidBodyProps['type'],
     canSleep: true,
@@ -119,27 +101,30 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
 
   const { nodes, materials } = useGLTF(cardGLB) as any;
   const texture = useTexture(lanyardTexture);
-  const [curve] = useState(
-    () =>
-      new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
-  );
+
+  
+  const [curve] = useState(() => new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(0, 0.5, 0),
+    new THREE.Vector3(0, 1, 0),
+    new THREE.Vector3(0, 1.5, 0)
+  ]));
+
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
+
+  // Mengubah resolution array menjadi Vector2 agar lebih stabil di ThreeFiber
+  const resolution = useMemo(() => new THREE.Vector2(1000, isMobile ? 2000 : 1000), [isMobile]);
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
-  useSphericalJoint(j3, card, [
-    [0, 0, 0],
-    [0, 1.45, 0]
-  ]);
+  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]]);
 
   useEffect(() => {
     if (hovered) {
       document.body.style.cursor = dragged ? 'grabbing' : 'grab';
-      return () => {
-        document.body.style.cursor = 'auto';
-      };
+      return () => { document.body.style.cursor = 'auto'; };
     }
   }, [hovered, dragged]);
 
@@ -155,23 +140,50 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
         z: vec.z - dragged.z
       });
     }
-    if (fixed.current) {
+
+    // FIX 2: Strict Null & NaN Check sebelum update Geometry
+    if (fixed.current && j1.current && j2.current && j3.current && card.current && band.current?.geometry) {
       [j1, j2].forEach(ref => {
         if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
-        const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
-        ref.current.lerped.lerp(
-          ref.current.translation(),
-          delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
-        );
+        
+        // Mencegah NaN pada calculation distance
+        const currentTranslation = ref.current.translation();
+        const lerped = ref.current.lerped;
+        
+        if (isFiniteVec(currentTranslation) && isFiniteVec(lerped)) {
+           const clampedDistance = Math.max(0.1, Math.min(1, lerped.distanceTo(currentTranslation)));
+           ref.current.lerped.lerp(
+             currentTranslation,
+             delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
+           );
+        }
       });
-      curve.points[0].copy(j3.current.translation());
-      curve.points[1].copy(j2.current.lerped);
-      curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
+
+      // Ambil posisi terbaru
+      const p0 = j3.current.translation();
+      const p1 = j2.current.lerped;
+      const p2 = j1.current.lerped;
+      const p3 = fixed.current.translation();
+
+      // FIX 3: Hanya update geometry jika semua titik VALID
+      if (isFiniteVec(p0) && isFiniteVec(p1) && isFiniteVec(p2) && isFiniteVec(p3)) {
+        curve.points[0].copy(p0);
+        curve.points[1].copy(p1);
+        curve.points[2].copy(p2);
+        curve.points[3].copy(p3);
+        
+        // Safety: Pastikan output curve valid sebelum setPoints
+        const points = curve.getPoints(isMobile ? 16 : 32);
+        if (points.every(isFiniteVec)) {
+             band.current.geometry.setPoints(points);
+        }
+      }
+
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+      if(isFiniteVec(ang) && isFiniteVec(rot)) {
+          card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+      }
     }
   });
 
@@ -229,15 +241,15 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
       </group>
       <mesh ref={band}>
         <meshLineGeometry />
-        <meshLineMaterial
-          color="white"
-          depthTest={false}
-          resolution={isMobile ? [1000, 2000] : [1000, 1000]}
-          useMap
-          map={texture}
-          repeat={[-4, 1]}
-          lineWidth={1}
-        />
+      <meshLineMaterial
+  args={[{ resolution }]}
+  color="white"
+  depthTest={false}
+  useMap={1}
+  map={texture}
+  repeat={[-4, 1]}
+  lineWidth={1}
+/>
       </mesh>
     </>
   );

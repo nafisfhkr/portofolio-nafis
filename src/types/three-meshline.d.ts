@@ -3,7 +3,12 @@ import type { ReactThreeFiber } from '@react-three/fiber';
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    meshLineGeometry: ReactThreeFiber.BufferGeometryNode<MeshLineGeometry, typeof MeshLineGeometry>;
-    meshLineMaterial: ReactThreeFiber.MaterialNode<MeshLineMaterial, typeof MeshLineMaterial>;
+    meshLineGeometry: ReactThreeFiber.ThreeElement<typeof MeshLineGeometry>;
+    meshLineMaterial: ReactThreeFiber.ThreeElement<typeof MeshLineMaterial>;
   }
+}
+
+declare module '*.glb' {
+  const src: string;
+  export default src;
 }
