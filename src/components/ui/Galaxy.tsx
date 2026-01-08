@@ -215,13 +215,30 @@ export default function Galaxy({
   const smoothMousePos = useRef({ x: 0.5, y: 0.5 });
   const targetMouseActive = useRef(0.0);
   const smoothMouseActive = useRef(0.0);
+  
+  // PERBAIKAN: Ref untuk melacak visibilitas komponen
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     if (!ctnDom.current) return;
     const ctn = ctnDom.current;
+
+    // PERBAIKAN: Gunakan Intersection Observer untuk pause animasi saat tidak terlihat
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    observer.observe(ctn);
+
+    // PERBAIKAN: Batasi Device Pixel Ratio (DPR) maksimal 1.5 untuk performa lebih baik
+    const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
+
     const renderer = new Renderer({
       alpha: transparent,
-      premultipliedAlpha: false
+      premultipliedAlpha: false,
+      dpr: pixelRatio, // Gunakan DPR yang sudah dibatasi
     });
     const gl = renderer.gl;
 
@@ -236,6 +253,8 @@ export default function Galaxy({
     let program: Program;
 
     function resize() {
+      // PERBAIKAN: Pastikan ukuran selalu valid
+      if (!ctn) return;
       const scale = 1;
       renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
       if (program) {
@@ -284,6 +303,10 @@ export default function Galaxy({
 
     function update(t: number) {
       animateId = requestAnimationFrame(update);
+
+      // PERBAIKAN: Lewati render jika komponen tidak terlihat di layar
+      if (!isVisibleRef.current) return;
+
       if (!disableAnimation) {
         program.uniforms.uTime.value = t * 0.001;
         program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
@@ -324,11 +347,14 @@ export default function Galaxy({
     return () => {
       cancelAnimationFrame(animateId);
       window.removeEventListener('resize', resize);
+      observer.disconnect(); // PERBAIKAN: Bersihkan observer
       if (mouseInteraction) {
         ctn.removeEventListener('mousemove', handleMouseMove);
         ctn.removeEventListener('mouseleave', handleMouseLeave);
       }
-      ctn.removeChild(gl.canvas);
+      if (ctn && gl.canvas && ctn.contains(gl.canvas)) {
+        ctn.removeChild(gl.canvas);
+      }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [

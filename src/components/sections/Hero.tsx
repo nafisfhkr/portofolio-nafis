@@ -8,8 +8,7 @@ export default function Hero() {
         <Galaxy />
       </div>
 
-      {/* 2. Overlay Gelap & Gradient */}
-      <div className="absolute inset-0 z-10 bg-black/60 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+      
 
       {/* 3. Konten Teks */}
       <div className="relative z-20 text-center lg:text-left px-6">
