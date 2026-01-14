@@ -1,33 +1,34 @@
 "use client";
 
-import { Smartphone } from "lucide-react";
+import { Smartphone, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-type SectionId = 'home' | 'about' | 'resume' | 'projects'| 'contact';
+type SectionId = 'home' | 'about' | 'resume' | 'projects' | 'contact';
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState<SectionId>('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (id: SectionId): void => {
-  setActiveSection(id);
-  const element = document.getElementById(id);
-  if (element) {
-    const navbarHeight = 80; 
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+    setActiveSection(id);
+    const element = document.getElementById(id);
+    if (element) {
+      const navbarHeight = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
 
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
-    });
-  }
-};
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
 
   // Deteksi section aktif saat scroll
   useEffect(() => {
     const handleScroll = () => {
       const sections: SectionId[] = ['home', 'about', 'resume', 'projects', 'contact'];
-      const scrollPosition = window.scrollY + 100; 
+      const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -45,13 +46,10 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Trigger sekali saat mount
     handleScroll();
-    
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
   const navItems: { id: SectionId; label: string }[] = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -62,8 +60,8 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 z-50 w-full px-6 py-6 lg:px-20 flex justify-between items-center bg-transparent backdrop-blur-sm">
-      {/* Menu Navigasi Kiri */}
-      <ul className="flex gap-8 text-[11px] font-medium tracking-[0.2em] text-white uppercase">
+      {/* Menu Navigasi Kiri (Desktop) */}
+      <ul className="hidden md:flex gap-8 text-[11px] font-medium tracking-[0.2em] text-white uppercase">
         {navItems.map((item) => (
           <li key={item.id}>
             <button
@@ -81,11 +79,60 @@ export default function Navbar() {
         ))}
       </ul>
 
-      {/* Info Kontak Kanan */}
+      {/* Info Kontak Kanan (Desktop) */}
       <div className="hidden md:flex items-center gap-2 text-[11px] tracking-widest text-white uppercase font-light">
         <Smartphone size={14} className="text-white" />
         <span>087-86227-5587</span>
       </div>
+
+      {/* Hamburger Menu (Mobile) */}
+      <button
+        className="md:hidden text-white focus:outline-none"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Toggle navigation menu"
+      >
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-black/90 flex flex-col items-center justify-center pt-20 space-y-6 md:hidden">
+          <button
+            className="absolute top-6 right-6 text-white"
+            onClick={() => setIsMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={24} />
+          </button>
+
+          <ul className="flex flex-col gap-6 text-xl font-medium tracking-[0.2em] text-white uppercase">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  onClick={() => {
+                    scrollToSection(item.id);
+                    setIsMenuOpen(false);
+                  }}
+                  className={`cursor-pointer pb-1 transition-all duration-300 ${
+                    activeSection === item.id
+                      ? "text-cyan-400 border-b-2 border-cyan-400"
+                      : "hover:text-cyan-300 hover:border-b hover:border-cyan-300/50"
+                  }`}
+                  aria-label={`Scroll to ${item.label} section`}
+                >
+                  {item.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Kontak di Mobile */}
+          <div className="flex items-center gap-2 text-sm tracking-widest text-white uppercase font-light mt-8">
+            <Smartphone size={16} className="text-white" />
+            <span>087-86227-5587</span>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
