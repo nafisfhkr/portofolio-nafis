@@ -4,10 +4,10 @@ import { PORTFOLIO_CONTEXT } from "../../../utils/portfolio-context";
 
 export async function POST(req: Request) {
   try {
-    // 1. CEK API KEY
+    
     const apiKey = process.env.GEMINI_API_KEY;
     
-    // Kalau Key kosong, bot akan lapor
+    
     if (!apiKey) {
       return NextResponse.json({ 
         reply: "⚠️ FATAL ERROR: API Key tidak ditemukan di Server Vercel! Mohon cek menu Settings > Environment Variables." 
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Gunakan model yang tadi berhasil di local
+    
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const { message } = await req.json();
