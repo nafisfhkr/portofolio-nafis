@@ -1,43 +1,28 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { NextResponse } from "next/server";
-import { PORTFOLIO_CONTEXT } from "../../../utils/portfolio-context";
+import { NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { PORTFOLIO_CONTEXT } from '../../../utils/portfolio-context';
 
-export async function POST(req: Request) {
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+export async function POST(request: Request) {
   try {
-    
-    const apiKey = process.env.GEMINI_API_KEY;
-    
-    
-    if (!apiKey) {
-      return NextResponse.json({ 
-        reply: "⚠️ FATAL ERROR: API Key tidak ditemukan di Server Vercel! Mohon cek menu Settings > Environment Variables." 
-      });
-    }
+    const { message } = await request.json();
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    
-    
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    const { message } = await req.json();
-
+    
     const prompt = `
       ${PORTFOLIO_CONTEXT}
-      User bertanya: "${message}"
-      Jawablah:
+
+      Pertanyaan pengunjung: "${message}"
+      Jawaban asisten:
     `;
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const responseText = result.response.text();
 
-    return NextResponse.json({ reply: text });
-
-  } catch (error: any) {
-    console.error("Error Server:", error);
-    
-    return NextResponse.json({ 
-      reply: `🐞 DEBUG MODE: Terjadi Error! \nPesan: ${error.message}` 
-    });
+    return NextResponse.json({ reply: responseText });
+  } catch (error) {
+    return NextResponse.json({ error: "Gagal merespon permintaan AI" }, { status: 500 });
   }
 }
