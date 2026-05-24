@@ -43,7 +43,7 @@ export default function Footer() {
               <a href="https://github.com/nafisfhkr" target="_blank" className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white hover:text-black transition-all duration-300">
                 <Github size={20} />
               </a>
-              <a href="https://www.linkedin.com/in/m-nafis-fakhrudin-653293339/" className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white hover:text-black transition-all duration-300">
+              <a href="https://www.linkedin.com/in/m-nafis-fakhrudin-76a746377/" className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white hover:text-black transition-all duration-300">
                 <Linkedin size={20} />
               </a>
               <a href="https://www.instagram.com/_nafisfakhru?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white hover:text-black transition-all duration-300">
