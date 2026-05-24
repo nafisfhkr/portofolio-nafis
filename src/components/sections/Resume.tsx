@@ -3,16 +3,22 @@ import { Briefcase, GraduationCap, Code2, Calendar, CheckCircle2 } from "lucide-
 export default function Resume() {
   const experiences = [
     {
+      title: "Software Engineer Intern",
+      company: "PT. Mudapedia Digital Indonesia",
+      period: "Feb 2026 - May 2026",
+      desc: "Bekerja sebagai full-stack engineer. Mengembangkan UI responsif dan integrasi RESTful API menggunakan Next.js, TypeScript, Supabase, dan PostgreSQL.",
+    },
+    {
+      title: "Data Scientist Trainee",
+      company: "DBS Foundation Coding Camp",
+      period: "Feb 2026 - Present",
+      desc: "Pelatihan intensif Data Science. Membangun Capstone Project AI: platform smart-matching influencer dan optimasi budget untuk UMKM.",
+    },
+    {
       title: "Mobile Dev & Scrum Master",
       company: "Bantuin Mobile App",
       period: "Jan 2025 - Present",
       desc: "Memimpin tim Agile 5 orang dan mengembangkan frontend mobile menggunakan Flutter & Firebase.",
-    },
-    {
-      title: "API & Backend Developer",
-      company: "Post Kasir",
-      period: "Jan 2025 ",
-      desc: "Membangun RESTful API dengan Laravel  dan melakukan pengujian endpoint menggunakan Postman.",
     },
     {
       title: "Algorithm Developer",
@@ -27,7 +33,7 @@ export default function Resume() {
       school: "Politeknik Negeri Banyuwangi",
       degree: "D4 Teknologi Rekayasa Perangkat Lunak",
       period: "2023 - Present",
-      desc: "Fokus pada Software Engineering dengan capaian IPK saat ini 3.83 / 4.00.",
+      desc: "Fokus pada Software Engineering dengan capaian IPK saat ini 3.72 / 4.00.",
     },
     {
       school: "SMAN 1 NGRONGGOT",
@@ -39,16 +45,16 @@ export default function Resume() {
 
   const skillCategories = [
     {
-      name: "Flutter Development",
-      items: ["Flutter", "Dart", "Firebase"]
+      name: "Data Science & ML",
+      items: ["Python", "Pandas", "Scikit-Learn", "Streamlit"]
     },
     {
-      name: "Back-End Development",
-      items: ["Laravel", "Laravel RestAPI", "PHP", "SQL / MySQL"]
+      name: "Full-Stack Web Development",
+      items: ["Next.js", "TypeScript","node.js", "Laravel", "PostgreSQL","MongoDB", "Supabase", "MySQL"]
     },
     {
-      name: "Website Development",
-      items: ["HTML", "CSS", "Laravel Framework"]
+      name: "Mobile Development",
+      items: ["Flutter", "Dart", "Firebase", "REST API"]
     }
   ];
 
