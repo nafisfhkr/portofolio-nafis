@@ -15,6 +15,9 @@ const skills = [
   { name: "GitHub", icon: "https://cdn.simpleicons.org/github/white" },
   { name: "Git", icon: "https://cdn.simpleicons.org/git/F05032" },
   { name: "HTML5", icon: "https://cdn.simpleicons.org/html5/E34F26" },
+  { name: "Supabase", icon: "https://cdn.simpleicons.org/supabase/3FCF71" },
+  { name: "MongoDB", icon: "https://cdn.simpleicons.org/mongodb/47A248" },
+  {name:"postgreSQL", icon:"https://cdn.simpleicons.org/postgresql/4169E1"} 
 ];
 
 export default function SkillsGrid() {
