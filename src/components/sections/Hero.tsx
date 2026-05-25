@@ -44,7 +44,7 @@ export default function Hero() {
         {/* Tombol Aksi (Resume) */}
         <div className="mt-10 flex flex-col md:flex-row gap-4 justify-center lg:justify-start">
           <a
-            href="/Resume.pdf"
+            href="/Resume_Nafis.pdf"
             download
             className="group relative inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-bold text-black transition-all hover:bg-gray-200 hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
           >
@@ -76,7 +76,7 @@ export default function Hero() {
           GITHUB
         </a>
         <a 
-          href="https://www.linkedin.com/in/m-nafis-fakhrudin-653293339/" 
+          href="https://www.linkedin.com/in/m-nafis-fakhrudin-76a746377/" 
           className="hover:text-white hover:scale-110 transition-all duration-300"
         >
           LINKEDIN
